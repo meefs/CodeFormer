@@ -1,0 +1,27 @@
+name: Sync with Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Fetch upstream
+      run: |
+        git remote add upstream https://github.com/sczhou/CodeFormer.git
+        git fetch upstream
+
+    - name: Merge upstream changes
+      run: |
+        git merge upstream/master # Merging from upstream's master branch
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        title: "Sync with upstream"
+        body: "Merging changes from original repository"
